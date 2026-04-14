@@ -56,6 +56,7 @@
         h4 { margin: 15px 0 5px 0; color: var(--primary); font-size: 0.85em; }
         label { display: block; margin: 8px 0 4px; font-weight: 600; font-size: 0.85em; color: #64748b; }
         
+        /* 1. 共用輸入框基礎樣式 */
         input[type="number"], select { 
             width: 100%; 
             padding: 12px; 
@@ -64,9 +65,28 @@
             font-size: 16px; 
             background-color: #f8fafc;
             box-sizing: border-box;
-            appearance: none; 
+            color: #334155;
         }
         input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
+
+        /* 2. 下拉選單：加上專屬箭頭符號 */
+        select {
+            appearance: none; 
+            -webkit-appearance: none;
+            /* 嵌入一個漂亮的 SVG 箭頭 */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 40px; /* 留空間給箭頭 */
+        }
+
+        /* 3. 數字輸入框：強制顯示上下增減箭頭 */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1 !important; /* 強制顯示 */
+            height: 35px; /* 增加觸控面積 */
+        }
 
         .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn { 
@@ -137,9 +157,9 @@
 <div class="header-section">
     <h2>泥作進料大師 Pro</h2>
     <div class="formula-info">
-	砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
+        砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
         砌磚：1m² = 80塊磚 + 0.25包水泥 + 0.025m³砂<br>
-	粗胚打底配比：1 包水泥 (40kg) : 6 包砂 (120kg)
+        粗胚打底配比：1 包水泥 (40kg) : 6 包砂 (120kg)
     </div>
 </div>
 
@@ -316,28 +336,22 @@
     function calculateMaterials() {
         function getResult(section) {
             const type = document.getElementById('type' + section).value;
-            // 抓取欄位上的坪數
             const areaPing = parseFloat(document.getElementById('area' + section).value) || 0;
             const thick = parseFloat(document.getElementById('thickness' + section).value) || 0;
             
-            // 將坪數轉為平方公尺 (m²) 以便套用紅磚新公式
             const areaM2 = areaPing / 0.3025;
             
             let bricks = 0, totalSand = 0, totalCement = 0;
 
             if (type === 'brick4') {
-                // 4吋磚公式：1m² = 80塊磚 + 0.25包水泥 + 0.025m³砂
                 bricks = areaM2 * 80;
                 totalCement = areaM2 * 0.25;
-                // 將砂子的 m³ 乘上 45 轉換為包數 (1立方=45包)
                 totalSand = (areaM2 * 0.025) * 45; 
             } else if (type === 'brick8') {
-                // 8吋磚公式：預設為 4吋牆的兩倍
                 bricks = areaM2 * 160;
                 totalCement = areaM2 * 0.5;
                 totalSand = (areaM2 * 0.05) * 45; 
             } else {
-                // 打底/粉光：沿用原本的公式
                 const sandPerPing = 1.8 * 1.8 * (thick / 100) * 45; 
                 totalSand = areaPing * sandPerPing;
                 totalCement = totalSand / 6;
