@@ -2,238 +2,238 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>泥作進料試算 - 門窗獨立扣除版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>泥作試算大師 Mobile</title>
     <style>
         :root {
             --primary: #2563eb;
+            --primary-hover: #1d4ed8;
             --secondary: #10b981;
-            --accent: #f59e0b;
             --dark: #1e293b;
-            --bg: #f8fafc;
+            --bg: #f1f5f9;
+            --card-radius: 16px;
         }
 
+        /* 基礎排版優化 */
         body { 
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+            font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
             background: var(--bg);
             color: #334155;
-            padding: 20px; 
+            padding: 15px 15px 140px 15px; /* 底部預留空間給浮動面板 */
+            margin: 0;
             display: flex; 
             flex-direction: column; 
             align-items: center; 
+            -webkit-tap-highlight-color: transparent; /* 移除手機點擊閃爍 */
         }
 
+        /* 標題區塊 */
         .header-section {
             background: #fff;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: var(--card-radius);
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             width: 100%;
-            max-width: 860px;
+            max-width: 600px;
             text-align: center;
-            border-top: 6px solid var(--primary);
+            border-top: 5px solid var(--primary);
+            box-sizing: border-box;
         }
+        .header-section h2 { margin: 0; font-size: 1.4em; color: var(--dark); }
+        .formula-info { font-size: 0.85em; color: #1e40af; background: #eff6ff; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: 500; }
 
-        .formula-info {
-            font-size: 0.9em;
-            color: #1e40af;
-            background: #eff6ff;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-weight: 500;
-        }
-
-        .container { 
-            display: flex; 
-            gap: 20px; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            width: 100%; 
-            max-width: 900px; 
-        }
-
+        /* 卡片共用設定 */
+        .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 15px; }
         .card { 
             background: #fff; 
-            padding: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02); 
-            width: 100%; 
-            max-width: 420px; 
+            padding: 20px 15px; 
+            border-radius: var(--card-radius); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03); 
             box-sizing: border-box; 
         }
+        .card-secondary { border-top: 5px solid var(--secondary); }
+        
+        h3 { margin: 0 0 15px 0; color: var(--dark); font-size: 1.1em; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        h4 { margin: 15px 0 5px 0; color: var(--primary); font-size: 0.85em; }
+        label { display: block; margin: 8px 0 4px; font-weight: 600; font-size: 0.85em; color: #64748b; }
+        
+        /* 輸入框加大，方便手指點擊 */
+        input[type="number"], select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            font-size: 16px; /* 必須是 16px 以上，iOS Safari 才不會自動放大畫面 */
+            background-color: #f8fafc;
+            box-sizing: border-box;
+            appearance: none; /* 移除預設樣式 */
+        }
+        input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
 
-        .card-secondary { border-top: 6px solid var(--secondary); max-width: 860px; }
-
-        .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        /* 頁籤設計 */
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn { 
-            padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;
-            background: #e2e8f0; color: #64748b; font-weight: bold;
+            flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer;
+            background: #e2e8f0; color: #64748b; font-weight: bold; font-size: 0.9em;
         }
         .tab-btn.active { background: var(--secondary); color: white; }
 
-        h3 { margin: 0 0 15px 0; color: var(--dark); border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
-        h4 { margin: 15px 0 5px 0; color: var(--primary); font-size: 0.9em; text-transform: uppercase; }
+        /* 網格排版 */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-        label { display: block; margin: 8px 0 3px; font-weight: 600; font-size: 0.85em; color: #64748b; }
-        
-        input[type="number"] { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 8px; 
-            font-size: 1em;
-        }
-
+        /* 坪數結果區塊 */
         .ping-box {
             background: #ecfdf5;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 12px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 15px;
             margin-top: 15px;
             border: 1px solid #bbf7d0;
+            text-align: center;
         }
+        .ping-val { font-size: 2em; font-weight: bold; color: #059669; }
 
-        .ping-val { font-size: 2.2em; font-weight: bold; color: #059669; }
-
+        /* 按鈕優化 */
+        .btn-group { display: flex; gap: 10px; width: 100%; }
         .btn {
+            flex: 1;
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 12px;
+            border-radius: 10px;
             font-weight: bold;
+            font-size: 0.95em;
         }
 
-        .result-box { 
-            margin-top: 15px; 
-            background: #f0f7ff; 
-            padding: 15px; 
-            border-radius: 8px; 
-        }
+        /* 結果顯示區塊 */
+        .result-box { margin-top: 15px; background: #f0f7ff; padding: 12px; border-radius: 10px; }
+        .result-item { display: flex; justify-content: space-between; margin: 6px 0; font-size: 1em; align-items: center;}
+        .result-item strong { color: var(--primary); font-size: 1.2em; }
 
-        .result-item { display: flex; justify-content: space-between; margin: 8px 0; font-size: 1.1em; }
-        .result-item strong { color: var(--primary); font-size: 1.3em; }
-
-        .deduct-summary {
-            font-size: 0.8em;
-            color: #ef4444;
-            margin-top: 5px;
-            font-weight: bold;
-        }
-
-        .total-card { 
-            background: var(--dark); 
-            color: white; 
-            padding: 25px; 
-            border-radius: 12px; 
+        /* 浮動底部面板 (超級適合手機 App) */
+        .floating-total { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
             width: 100%; 
-            max-width: 860px; 
-            margin-top: 20px; 
-            text-align: center; 
+            background: rgba(30, 41, 59, 0.95); 
+            backdrop-filter: blur(10px);
+            color: white; 
+            padding: 15px 20px; 
+            padding-bottom: calc(15px + env(safe-area-inset-bottom)); /* 避開 iPhone 底部橫條 */
+            border-radius: 20px 20px 0 0; 
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
         }
+        .total-item { text-align: center; }
+        .total-label { font-size: 0.8em; color: #94a3b8; margin-bottom: 4px; display: block;}
+        .total-num { font-size: 2em; font-weight: bold; color: #fbbf24; }
+        .total-unit { font-size: 0.5em; color: #fff; }
 
-        .total-grid { display: flex; justify-content: space-around; }
-        .total-num { font-size: 2.5em; font-weight: bold; color: #fbbf24; display: block; }
+        /* 手機版細節微調 */
+        @media (max-width: 400px) {
+            .grid-3 { grid-template-columns: 1fr 1fr; } /* 太小的螢幕把 3 格變 2 格 */
+            .grid-3 div:last-child { grid-column: span 2; }
+            .ping-val { font-size: 1.8em; }
+        }
     </style>
 </head>
 <body>
 
 <div class="header-section">
-    <h2 style="margin:0">泥作進料試算 (門窗獨立計算版)</h2>
+    <h2>泥作進料試算 Pro</h2>
     <div class="formula-info">
-        砂子公式：1.8m × 1.8m × 厚度(m) × 45 包<br>
+        砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
         配比基準：1 包水泥 : 6 包砂 (20kg)
     </div>
 </div>
 
 <div class="container">
     <div class="card card-secondary">
-        <h3>📐 1. 坪數丈量工具</h3>
+        <h3>📐 1. 丈量工具</h3>
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('floor')">平面計算</button>
             <button class="tab-btn" onclick="switchTab('wall')">浴室牆面</button>
         </div>
 
         <div id="floorTab">
-            <div style="display: flex; gap: 15px;">
-                <div style="flex: 1;">
-                    <label>長度 (cm)</label>
-                    <input type="number" id="floorL" placeholder="0" oninput="calculatePing()">
-                </div>
-                <div style="flex: 1;">
-                    <label>寬度 (cm)</label>
-                    <input type="number" id="floorW" placeholder="0" oninput="calculatePing()">
-                </div>
+            <div class="grid-2">
+                <div><label>長度 (cm)</label><input type="number" inputmode="decimal" id="floorL" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>寬度 (cm)</label><input type="number" inputmode="decimal" id="floorW" placeholder="0" oninput="calculatePing()"></div>
             </div>
         </div>
 
         <div id="wallTab" style="display:none;">
-            <h4>牆面基礎 (cm)</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                <div><label>浴室長</label><input type="number" id="bathL" oninput="calculatePing()"></div>
-                <div><label>浴室寬</label><input type="number" id="bathW" oninput="calculatePing()"></div>
-                <div><label>牆高</label><input type="number" id="bathH" value="240" oninput="calculatePing()"></div>
+            <div class="grid-3">
+                <div><label>浴室長</label><input type="number" inputmode="decimal" id="bathL" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>浴室寬</label><input type="number" inputmode="decimal" id="bathW" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>牆高</label><input type="number" inputmode="decimal" id="bathH" value="240" oninput="calculatePing()"></div>
             </div>
-
-            <h4>扣除部分 (cm)</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #fef2f2; padding: 10px; border-radius: 8px;">
-                <div>
-                    <label>門寬</label><input type="number" id="doorW" value="75" oninput="calculatePing()">
-                    <label>門高</label><input type="number" id="doorH" value="200" oninput="calculatePing()">
-                </div>
-                <div>
-                    <label>窗寬</label><input type="number" id="winW" placeholder="0" oninput="calculatePing()">
-                    <label>窗高</label><input type="number" id="winH" placeholder="0" oninput="calculatePing()">
-                </div>
+            <h4>扣除門窗 (cm)</h4>
+            <div class="grid-2" style="background: #fef2f2; padding: 12px; border-radius: 10px;">
+                <div><label>門寬</label><input type="number" inputmode="decimal" id="doorW" value="75" oninput="calculatePing()"></div>
+                <div><label>門高</label><input type="number" inputmode="decimal" id="doorH" value="200" oninput="calculatePing()"></div>
+                <div><label>窗寬</label><input type="number" inputmode="decimal" id="winW" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>窗高</label><input type="number" inputmode="decimal" id="winH" placeholder="0" oninput="calculatePing()"></div>
             </div>
-            <div class="deduct-summary" id="deductTotalDisplay">目前扣除總計：0.00 坪</div>
+            <div style="font-size: 0.75em; color: #ef4444; margin-top: 8px; font-weight: bold;" id="deductTotalDisplay">扣除面積：0.00 坪</div>
         </div>
 
         <div class="ping-box">
             <div>
-                <span style="color: #64748b;" id="pingTypeLabel">平面坪數</span><br>
+                <span style="color: #64748b; font-size: 0.9em;" id="pingTypeLabel">平面坪數</span><br>
                 <span class="ping-val" id="pingResult">0.00</span> 坪
             </div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn" onclick="importArea('A')">帶入區域 A</button>
-                <button class="btn" onclick="importArea('B')">帶入區域 B</button>
+            <div class="btn-group">
+                <button class="btn" onclick="importArea('A')">帶入 A 區</button>
+                <button class="btn" onclick="importArea('B')">帶入 B 區</button>
             </div>
         </div>
     </div>
 
-    <div class="card" style="border-top: 6px solid var(--primary);">
+    <div class="card" style="border-top: 5px solid var(--primary);">
         <h3>工程區域 A</h3>
-        <label>施工厚度 (公分)</label>
-        <input type="number" id="thicknessA" value="2" step="0.5" oninput="calculateMaterials()">
-        <label>施作面積 (坪)</label>
-        <input type="number" id="areaA" value="0" step="0.1" oninput="calculateMaterials()">
+        <div class="grid-2">
+            <div><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessA" value="5" step="0.5" oninput="calculateMaterials()"></div>
+            <div><label>面積 (坪)</label><input type="number" inputmode="decimal" id="areaA" value="0" step="0.1" oninput="calculateMaterials()"></div>
+        </div>
         <div class="result-box">
-            <div class="result-item"><span>砂子 (20kg包)</span> <strong><span id="sandA">0</span></strong></div>
-            <div class="result-item"><span>水泥 (40kg包)</span> <strong><span id="cementA">0</span></strong></div>
+            <div class="result-item"><span>砂子 (20kg)</span> <strong><span id="sandA">0</span> 包</strong></div>
+            <div class="result-item"><span>水泥 (40kg)</span> <strong><span id="cementA">0</span> 包</strong></div>
         </div>
     </div>
 
-    <div class="card" style="border-top: 6px solid var(--primary);">
+    <div class="card" style="border-top: 5px solid var(--primary);">
         <h3>工程區域 B</h3>
-        <label>施工厚度 (公分)</label>
-        <input type="number" id="thicknessB" value="2" step="0.5" oninput="calculateMaterials()">
-        <label>施作面積 (坪)</label>
-        <input type="number" id="areaB" value="0" step="0.1" oninput="calculateMaterials()">
+        <div class="grid-2">
+            <div><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessB" value="5" step="0.5" oninput="calculateMaterials()"></div>
+            <div><label>面積 (坪)</label><input type="number" inputmode="decimal" id="areaB" value="0" step="0.1" oninput="calculateMaterials()"></div>
+        </div>
         <div class="result-box">
-            <div class="result-item"><span>砂子 (20kg包)</span> <strong><span id="sandB">0</span></strong></div>
-            <div class="result-item"><span>水泥 (40kg包)</span> <strong><span id="cementB">0</span></strong></div>
+            <div class="result-item"><span>砂子 (20kg)</span> <strong><span id="sandB">0</span> 包</strong></div>
+            <div class="result-item"><span>水泥 (40kg)</span> <strong><span id="cementB">0</span> 包</strong></div>
         </div>
     </div>
 </div>
 
-<div class="total-card">
-    <div class="total-grid">
-        <div>水泥總計 (40kg)<span class="total-num" id="totalCement">0</span>包</div>
-        <div>砂子總計 (20kg)<span class="total-num" id="totalSand">0</span>包</div>
+<div class="floating-total">
+    <div class="total-item">
+        <span class="total-label">總水泥 (40kg)</span>
+        <span class="total-num" id="totalCement">0</span><span class="total-unit"> 包</span>
+    </div>
+    <div style="width: 1px; height: 40px; background: rgba(255,255,255,0.2);"></div>
+    <div class="total-item">
+        <span class="total-label">總砂子 (20kg)</span>
+        <span class="total-num" id="totalSand">0</span><span class="total-unit"> 包</span>
     </div>
 </div>
 
@@ -261,18 +261,16 @@
             const W = (parseFloat(document.getElementById('bathW').value) || 0) / 100;
             const H = (parseFloat(document.getElementById('bathH').value) || 0) / 100;
             
-            // 計算牆面總坪數
             const wallSqm = (L + W) * 2 * H;
             const wallPingTotal = wallSqm * 0.3025;
 
-            // 計算扣除部分 (cm 轉 m 再轉坪)
             const dW = (parseFloat(document.getElementById('doorW').value) || 0) / 100;
             const dH = (parseFloat(document.getElementById('doorH').value) || 0) / 100;
             const wW = (parseFloat(document.getElementById('winW').value) || 0) / 100;
             const wH = (parseFloat(document.getElementById('winH').value) || 0) / 100;
             
             const deductPing = ((dW * dH) + (wW * wH)) * 0.3025;
-            document.getElementById('deductTotalDisplay').innerText = `目前扣除總計：${deductPing.toFixed(2)} 坪`;
+            document.getElementById('deductTotalDisplay').innerText = `扣除面積：${deductPing.toFixed(2)} 坪`;
 
             ping = wallPingTotal - deductPing;
             if (ping < 0) ping = 0;
@@ -285,6 +283,17 @@
     function importArea(section) {
         const val = document.getElementById('pingResult').dataset.value || 0;
         document.getElementById('area' + section).value = val;
+        
+        // 點擊回饋動畫
+        const btn = event.target;
+        const ogText = btn.innerText;
+        btn.innerText = "✓ 成功";
+        btn.style.background = "#10b981";
+        setTimeout(() => {
+            btn.innerText = ogText;
+            btn.style.background = "";
+        }, 800);
+
         calculateMaterials();
     }
 
@@ -297,12 +306,15 @@
             const totalCement = totalSand / 6;
             return { s: totalSand, c: totalCement };
         }
+        
         const resA = getResult('A');
         const resB = getResult('B');
+        
         document.getElementById('sandA').innerText = resA.s.toFixed(1);
         document.getElementById('cementA').innerText = resA.c.toFixed(1);
         document.getElementById('sandB').innerText = resB.s.toFixed(1);
         document.getElementById('cementB').innerText = resB.c.toFixed(1);
+        
         document.getElementById('totalSand').innerText = Math.ceil(resA.s + resB.s);
         document.getElementById('totalCement').innerText = Math.ceil(resA.c + resB.c);
     }
