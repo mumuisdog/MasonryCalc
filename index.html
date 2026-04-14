@@ -3,31 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>泥作試算大師 Mobile</title>
+    <title>泥作試算大師 Mobile (精確紅磚公式)</title>
     <style>
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
             --secondary: #10b981;
+            --brick: #dc2626;
             --dark: #1e293b;
             --bg: #f1f5f9;
             --card-radius: 16px;
         }
 
-        /* 基礎排版優化 */
         body { 
             font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
             background: var(--bg);
             color: #334155;
-            padding: 15px 15px 140px 15px; /* 底部預留空間給浮動面板 */
+            padding: 15px 15px 140px 15px; 
             margin: 0;
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            -webkit-tap-highlight-color: transparent; /* 移除手機點擊閃爍 */
+            -webkit-tap-highlight-color: transparent; 
         }
 
-        /* 標題區塊 */
         .header-section {
             background: #fff;
             padding: 15px;
@@ -41,9 +40,8 @@
             box-sizing: border-box;
         }
         .header-section h2 { margin: 0; font-size: 1.4em; color: var(--dark); }
-        .formula-info { font-size: 0.85em; color: #1e40af; background: #eff6ff; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: 500; }
+        .formula-info { font-size: 0.8em; color: #1e40af; background: #eff6ff; padding: 8px; border-radius: 8px; margin-top: 10px; font-weight: 500; line-height: 1.4; }
 
-        /* 卡片共用設定 */
         .container { width: 100%; max-width: 600px; display: flex; flex-direction: column; gap: 15px; }
         .card { 
             background: #fff; 
@@ -58,20 +56,18 @@
         h4 { margin: 15px 0 5px 0; color: var(--primary); font-size: 0.85em; }
         label { display: block; margin: 8px 0 4px; font-weight: 600; font-size: 0.85em; color: #64748b; }
         
-        /* 輸入框加大，方便手指點擊 */
         input[type="number"], select { 
             width: 100%; 
             padding: 12px; 
             border: 1px solid #cbd5e1; 
             border-radius: 10px; 
-            font-size: 16px; /* 必須是 16px 以上，iOS Safari 才不會自動放大畫面 */
+            font-size: 16px; 
             background-color: #f8fafc;
             box-sizing: border-box;
-            appearance: none; /* 移除預設樣式 */
+            appearance: none; 
         }
         input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
 
-        /* 頁籤設計 */
         .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
         .tab-btn { 
             flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer;
@@ -79,11 +75,9 @@
         }
         .tab-btn.active { background: var(--secondary); color: white; }
 
-        /* 網格排版 */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-        /* 坪數結果區塊 */
         .ping-box {
             background: #ecfdf5;
             padding: 15px;
@@ -97,25 +91,14 @@
         }
         .ping-val { font-size: 2em; font-weight: bold; color: #059669; }
 
-        /* 按鈕優化 */
         .btn-group { display: flex; gap: 10px; width: 100%; }
-        .btn {
-            flex: 1;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
+        .btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 0.95em; }
 
-        /* 結果顯示區塊 */
         .result-box { margin-top: 15px; background: #f0f7ff; padding: 12px; border-radius: 10px; }
         .result-item { display: flex; justify-content: space-between; margin: 6px 0; font-size: 1em; align-items: center;}
         .result-item strong { color: var(--primary); font-size: 1.2em; }
+        .result-item.brick-text strong { color: var(--brick); }
 
-        /* 浮動底部面板 (超級適合手機 App) */
         .floating-total { 
             position: fixed; 
             bottom: 0; 
@@ -124,36 +107,39 @@
             background: rgba(30, 41, 59, 0.95); 
             backdrop-filter: blur(10px);
             color: white; 
-            padding: 15px 20px; 
-            padding-bottom: calc(15px + env(safe-area-inset-bottom)); /* 避開 iPhone 底部橫條 */
+            padding: 15px 10px; 
+            padding-bottom: calc(15px + env(safe-area-inset-bottom)); 
             border-radius: 20px 20px 0 0; 
             box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
             z-index: 1000;
             box-sizing: border-box;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             align-items: center;
         }
-        .total-item { text-align: center; }
-        .total-label { font-size: 0.8em; color: #94a3b8; margin-bottom: 4px; display: block;}
-        .total-num { font-size: 2em; font-weight: bold; color: #fbbf24; }
-        .total-unit { font-size: 0.5em; color: #fff; }
+        .total-item { text-align: center; flex: 1; }
+        .total-label { font-size: 0.75em; color: #94a3b8; margin-bottom: 4px; display: block;}
+        .total-num { font-size: 1.6em; font-weight: bold; color: #fbbf24; }
+        .total-num.brick-num { color: #f87171; } 
+        .total-unit { font-size: 0.6em; color: #fff; }
+        .divider { width: 1px; height: 35px; background: rgba(255,255,255,0.2); }
 
-        /* 手機版細節微調 */
         @media (max-width: 400px) {
-            .grid-3 { grid-template-columns: 1fr 1fr; } /* 太小的螢幕把 3 格變 2 格 */
+            .grid-3 { grid-template-columns: 1fr 1fr; } 
             .grid-3 div:last-child { grid-column: span 2; }
             .ping-val { font-size: 1.8em; }
+            .total-num { font-size: 1.4em; }
         }
     </style>
 </head>
 <body>
 
 <div class="header-section">
-    <h2>泥作進料試算 Pro</h2>
+    <h2>泥作進料大師 Pro</h2>
     <div class="formula-info">
-        砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
-        配比基準：1 包水泥 : 6 包砂 (20kg)
+	砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
+        砌磚：1m² = 80塊磚 + 0.25包水泥 + 0.025m³砂<br>
+	粗胚打底配比：1 包水泥 (40kg) : 6 包砂 (120kg)
     </div>
 </div>
 
@@ -202,11 +188,19 @@
 
     <div class="card" style="border-top: 5px solid var(--primary);">
         <h3>工程區域 A</h3>
+        <label>施工項目</label>
+        <select id="typeA" onchange="toggleType('A'); calculateMaterials();" style="margin-bottom: 10px;">
+            <option value="plaster">粗胚打底 (自訂厚度)</option>
+            <option value="brick4">4 吋紅磚牆 (1/2B)</option>
+            <option value="brick8">8 吋紅磚牆 (1B)</option>
+        </select>
+
         <div class="grid-2">
-            <div><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessA" value="5" step="0.5" oninput="calculateMaterials()"></div>
+            <div id="thickDivA"><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessA" value="3" step="0.5" oninput="calculateMaterials()"></div>
             <div><label>面積 (坪)</label><input type="number" inputmode="decimal" id="areaA" value="0" step="0.1" oninput="calculateMaterials()"></div>
         </div>
         <div class="result-box">
+            <div class="result-item brick-text" id="brickRowA" style="display:none;"><span>紅磚數量</span> <strong><span id="brickA">0</span> 塊</strong></div>
             <div class="result-item"><span>砂子 (20kg)</span> <strong><span id="sandA">0</span> 包</strong></div>
             <div class="result-item"><span>水泥 (40kg)</span> <strong><span id="cementA">0</span> 包</strong></div>
         </div>
@@ -214,11 +208,19 @@
 
     <div class="card" style="border-top: 5px solid var(--primary);">
         <h3>工程區域 B</h3>
+        <label>施工項目</label>
+        <select id="typeB" onchange="toggleType('B'); calculateMaterials();" style="margin-bottom: 10px;">
+            <option value="plaster">粗胚打底 (自訂厚度)</option>
+            <option value="brick4">4 吋紅磚牆 (1/2B)</option>
+            <option value="brick8">8 吋紅磚牆 (1B)</option>
+        </select>
+
         <div class="grid-2">
-            <div><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessB" value="5" step="0.5" oninput="calculateMaterials()"></div>
+            <div id="thickDivB"><label>厚度 (cm)</label><input type="number" inputmode="decimal" id="thicknessB" value="5" step="0.5" oninput="calculateMaterials()"></div>
             <div><label>面積 (坪)</label><input type="number" inputmode="decimal" id="areaB" value="0" step="0.1" oninput="calculateMaterials()"></div>
         </div>
         <div class="result-box">
+            <div class="result-item brick-text" id="brickRowB" style="display:none;"><span>紅磚數量</span> <strong><span id="brickB">0</span> 塊</strong></div>
             <div class="result-item"><span>砂子 (20kg)</span> <strong><span id="sandB">0</span> 包</strong></div>
             <div class="result-item"><span>水泥 (40kg)</span> <strong><span id="cementB">0</span> 包</strong></div>
         </div>
@@ -226,13 +228,19 @@
 </div>
 
 <div class="floating-total">
+    <div class="total-item" id="totalBrickDiv" style="display:none;">
+        <span class="total-label">總紅磚</span>
+        <span class="total-num brick-num" id="totalBrick">0</span><span class="total-unit"> 塊</span>
+    </div>
+    <div class="divider" id="brickDivider" style="display:none;"></div>
+    
     <div class="total-item">
-        <span class="total-label">總水泥 (40kg)</span>
+        <span class="total-label">總水泥(40kg)</span>
         <span class="total-num" id="totalCement">0</span><span class="total-unit"> 包</span>
     </div>
-    <div style="width: 1px; height: 40px; background: rgba(255,255,255,0.2);"></div>
+    <div class="divider"></div>
     <div class="total-item">
-        <span class="total-label">總砂子 (20kg)</span>
+        <span class="total-label">總砂子(20kg)</span>
         <span class="total-num" id="totalSand">0</span><span class="total-unit"> 包</span>
     </div>
 </div>
@@ -284,7 +292,6 @@
         const val = document.getElementById('pingResult').dataset.value || 0;
         document.getElementById('area' + section).value = val;
         
-        // 點擊回饋動畫
         const btn = event.target;
         const ogText = btn.innerText;
         btn.innerText = "✓ 成功";
@@ -297,27 +304,72 @@
         calculateMaterials();
     }
 
+    function toggleType(section) {
+        const type = document.getElementById('type' + section).value;
+        const isBrick = type.includes('brick');
+        
+        document.getElementById('thickDiv' + section).style.opacity = isBrick ? '0.3' : '1';
+        document.getElementById('thickness' + section).disabled = isBrick;
+        document.getElementById('brickRow' + section).style.display = isBrick ? 'flex' : 'none';
+    }
+
     function calculateMaterials() {
         function getResult(section) {
-            const area = parseFloat(document.getElementById('area' + section).value) || 0;
+            const type = document.getElementById('type' + section).value;
+            // 抓取欄位上的坪數
+            const areaPing = parseFloat(document.getElementById('area' + section).value) || 0;
             const thick = parseFloat(document.getElementById('thickness' + section).value) || 0;
-            const sandPerPing = 1.8 * 1.8 * (thick / 100) * 45; 
-            const totalSand = area * sandPerPing;
-            const totalCement = totalSand / 6;
-            return { s: totalSand, c: totalCement };
+            
+            // 將坪數轉為平方公尺 (m²) 以便套用紅磚新公式
+            const areaM2 = areaPing / 0.3025;
+            
+            let bricks = 0, totalSand = 0, totalCement = 0;
+
+            if (type === 'brick4') {
+                // 4吋磚公式：1m² = 80塊磚 + 0.25包水泥 + 0.025m³砂
+                bricks = areaM2 * 80;
+                totalCement = areaM2 * 0.25;
+                // 將砂子的 m³ 乘上 45 轉換為包數 (1立方=45包)
+                totalSand = (areaM2 * 0.025) * 45; 
+            } else if (type === 'brick8') {
+                // 8吋磚公式：預設為 4吋牆的兩倍
+                bricks = areaM2 * 160;
+                totalCement = areaM2 * 0.5;
+                totalSand = (areaM2 * 0.05) * 45; 
+            } else {
+                // 打底/粉光：沿用原本的公式
+                const sandPerPing = 1.8 * 1.8 * (thick / 100) * 45; 
+                totalSand = areaPing * sandPerPing;
+                totalCement = totalSand / 6;
+            }
+
+            return { b: bricks, s: totalSand, c: totalCement };
         }
         
         const resA = getResult('A');
         const resB = getResult('B');
         
+        document.getElementById('brickA').innerText = Math.ceil(resA.b);
         document.getElementById('sandA').innerText = resA.s.toFixed(1);
         document.getElementById('cementA').innerText = resA.c.toFixed(1);
+
+        document.getElementById('brickB').innerText = Math.ceil(resB.b);
         document.getElementById('sandB').innerText = resB.s.toFixed(1);
         document.getElementById('cementB').innerText = resB.c.toFixed(1);
         
+        const totalB = Math.ceil(resA.b + resB.b);
+        document.getElementById('totalBrick').innerText = totalB;
         document.getElementById('totalSand').innerText = Math.ceil(resA.s + resB.s);
         document.getElementById('totalCement').innerText = Math.ceil(resA.c + resB.c);
+
+        const showBrickTotal = (totalB > 0);
+        document.getElementById('totalBrickDiv').style.display = showBrickTotal ? 'block' : 'none';
+        document.getElementById('brickDivider').style.display = showBrickTotal ? 'block' : 'none';
     }
+    
+    // 初始化執行一次
+    toggleType('A');
+    toggleType('B');
 </script>
 </body>
 </html>
