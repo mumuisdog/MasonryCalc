@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>泥作進料大師 Pro</title>
-	<link rel="apple-touch-icon" href="app-icon.png">
-	<link rel="icon" type="image/png" sizes="192x192" href="app-icon.png">
-	<meta name="apple-mobile-web-app-title" content="泥作大師">
-	<meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="app-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="app-icon.png">
+    <meta name="apple-mobile-web-app-title" content="泥作大師">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <style>
         :root {
             --primary: #2563eb;
@@ -82,7 +82,7 @@
 <div class="header-section">
     <h2>泥作進料大師 Pro</h2>
     <div class="formula-info">
-	砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
+        砂子：1.8m × 1.8m × 厚度(m) × 45 包<br>
         磁磚：32400 ÷ (長cm × 寬cm) = 每坪片數<br>
         砌磚：1m² = 80塊磚 + 0.25包水泥 + 0.025m³砂<br>
         粗胚打底配比：1 包水泥 (40kg) : 6 包砂 (120kg)
@@ -142,6 +142,12 @@
             <div class="ping-box">
                 <span id="pingTypeLabel" style="font-size: 0.9em; font-weight: bold; color: #64748b;">目前計算坪數</span><br>
                 <span class="ping-val" id="pingResult">0.00</span> 坪
+                
+                <div id="splitPingDetails" style="display:none; margin: 10px 0; padding-top: 10px; border-top: 1px dashed #bbf7d0; font-size: 0.9em; color: #475569;">
+                    牆面：<span id="wallPingVal" style="color: #059669; font-weight: bold;">0.00</span> 坪 &nbsp;|&nbsp;
+                    地板：<span id="floorPingVal" style="color: #059669; font-weight: bold;">0.00</span> 坪
+                </div>
+
                 <div class="btn-group">
                     <button class="btn" onclick="importArea('A')">帶入 A 區</button>
                     <button class="btn" onclick="importArea('B')">帶入 B 區</button>
@@ -217,6 +223,10 @@
         document.getElementById('wallTab').style.display = mode === 'wall' ? 'block' : 'none';
         document.getElementById('tileTab').style.display = mode === 'tile' ? 'block' : 'none';
         document.getElementById('pingSummarySection').style.display = mode === 'tile' ? 'none' : 'block';
+        
+        // 切換時決定是否顯示「牆面/地板」分開的區塊
+        document.getElementById('splitPingDetails').style.display = mode === 'wall' ? 'block' : 'none';
+        
         calculatePing();
     }
 
@@ -244,10 +254,21 @@
             const H = (parseFloat(document.getElementById('bathH').value) || 0) / 100;
             const dW = (parseFloat(document.getElementById('doorW').value) || 0) / 100;
             const dH = (parseFloat(document.getElementById('doorH').value) || 0) / 100;
-            const wallSqm = (L + W) * 2 * H;
+            
+            // 分開計算牆面與地板的平方公尺
             const floorSqm = (L * W);
-            ping = (wallSqm + floorSqm - (dW * dH)) * 0.3025;
+            const wallSqm = (L + W) * 2 * H - (dW * dH); // 門的面積從牆面扣除
+            
+            // 換算為坪數
+            const floorPing = floorSqm * 0.3025;
+            const wallPing = wallSqm * 0.3025;
+            
+            ping = floorPing + wallPing;
             document.getElementById('pingTypeLabel').innerText = '浴室牆地總坪數';
+            
+            // 更新畫面上的分開數值
+            document.getElementById('floorPingVal').innerText = Math.max(0, floorPing).toFixed(2);
+            document.getElementById('wallPingVal').innerText = Math.max(0, wallPing).toFixed(2);
         }
         
         const finalPing = Math.max(0, ping).toFixed(2);
