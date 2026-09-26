@@ -101,7 +101,8 @@
             color: var(--text-label); 
         }
         
-        input[type="number"], select { 
+        /* 支援 type="text" 輸入框維持相同風格 */
+        input[type="text"], input[type="number"], select { 
             width: 100%; 
             padding: 12px 14px; 
             border: 2px solid var(--border-ui); 
@@ -112,7 +113,7 @@
             color: #000000;
             outline: none;
         }
-        input[type="number"]:focus, select:focus {
+        input[type="text"]:focus, select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
         }
@@ -290,28 +291,28 @@
 
         <div id="floorTab">
             <div class="grid-2">
-                <div><label>長度 (cm)</label><input type="number" id="floorL" inputmode="decimal" step="any" placeholder="0" oninput="calculatePing()"></div>
-                <div><label>寬度 (cm)</label><input type="number" id="floorW" inputmode="decimal" step="any" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>長度 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="floorL" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>寬度 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="floorW" placeholder="0" oninput="calculatePing()"></div>
             </div>
         </div>
 
         <div id="wallTab" style="display:none;">
             <div class="grid-3">
-                <div><label>浴室長 (cm)</label><input type="number" id="bathL" inputmode="decimal" step="any" placeholder="0" oninput="calculatePing()"></div>
-                <div><label>浴室寬 (cm)</label><input type="number" id="bathW" inputmode="decimal" step="any" placeholder="0" oninput="calculatePing()"></div>
-                <div><label>牆高 (cm)</label><input type="number" id="bathH" inputmode="decimal" step="any" value="240" oninput="calculatePing()"></div>
+                <div><label>浴室長 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="bathL" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>浴室寬 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="bathW" placeholder="0" oninput="calculatePing()"></div>
+                <div><label>牆高 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="bathH" value="240" oninput="calculatePing()"></div>
             </div>
             <div class="grid-2" style="margin-top:12px; background: #fef2f2; padding: 12px; border-radius: 10px; border: 2px dashed #f87171;">
-                <div><label style="color:#b91c1c;">扣門寬 (cm)</label><input type="number" id="doorW" inputmode="decimal" step="any" value="75" oninput="calculatePing()"></div>
-                <div><label style="color:#b91c1c;">扣門高 (cm)</label><input type="number" id="doorH" inputmode="decimal" step="any" value="210" oninput="calculatePing()"></div>
+                <div><label style="color:#b91c1c;">扣門寬 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="doorW" value="75" oninput="calculatePing()"></div>
+                <div><label style="color:#b91c1c;">扣門高 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="doorH" value="210" oninput="calculatePing()"></div>
             </div>
         </div>
 
         <div id="tileTab" style="display:none;">
             <div class="tile-calc-box">
                 <div class="grid-2">
-                    <div><label>磁磚長 (cm)</label><input type="number" id="tileL" inputmode="decimal" step="any" value="60" oninput="calculateTileDensity()"></div>
-                    <div><label>磁磚寬 (cm)</label><input type="number" id="tileW" inputmode="decimal" step="any" value="60" oninput="calculateTileDensity()"></div>
+                    <div><label>磁磚長 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="tileL" value="60" oninput="calculateTileDensity()"></div>
+                    <div><label>磁磚寬 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="tileW" value="60" oninput="calculateTileDensity()"></div>
                 </div>
                 <div style="margin-top:10px; text-align: center;">
                     <span style="font-size: 0.95em; font-weight:700; color: #701a75;">一坪片數：</span>
@@ -320,7 +321,7 @@
             </div>
             <div style="margin-top:12px;">
                 <label>施工總坪數</label>
-                <input type="number" id="tileTotalArea" inputmode="decimal" step="any" placeholder="輸入總坪數" oninput="calculateTileDensity()">
+                <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="tileTotalArea" placeholder="輸入總坪數" oninput="calculateTileDensity()">
             </div>
             <div class="ping-box" style="background:#fdf4ff; border-color:#f0abfc;">
                 <span class="ping-title" style="color:#86198f;">磁磚總需求量</span>
@@ -357,8 +358,8 @@
             <option value="brick8">8 吋紅磚牆 (1B)</option>
         </select>
         <div class="grid-2" style="margin-top:10px;">
-            <div id="thickDivA"><label>打底厚度 (cm)</label><input type="number" id="thicknessA" inputmode="decimal" step="any" value="3" oninput="calculateMaterials()"></div>
-            <div><label>施作面積 (坪)</label><input type="number" id="areaA" inputmode="decimal" step="any" value="0" oninput="calculateMaterials()"></div>
+            <div id="thickDivA"><label>打底厚度 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="thicknessA" value="3" oninput="calculateMaterials()"></div>
+            <div><label>施作面積 (坪)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="areaA" value="0" oninput="calculateMaterials()"></div>
         </div>
         
         <div class="result-grid">
@@ -388,8 +389,8 @@
             <option value="brick8">8 吋紅磚牆 (1B)</option>
         </select>
         <div class="grid-2" style="margin-top:10px;">
-            <div id="thickDivB"><label>打底厚度 (cm)</label><input type="number" id="thicknessB" inputmode="decimal" step="any" value="5" oninput="calculateMaterials()"></div>
-            <div><label>施作面積 (坪)</label><input type="number" id="areaB" inputmode="decimal" step="any" value="0" oninput="calculateMaterials()"></div>
+            <div id="thickDivB"><label>打底厚度 (cm)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="thicknessB" value="5" oninput="calculateMaterials()"></div>
+            <div><label>施作面積 (坪)</label><input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" id="areaB" value="0" oninput="calculateMaterials()"></div>
         </div>
         
         <div class="result-grid">
